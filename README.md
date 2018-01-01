@@ -1,6 +1,9 @@
 腾讯云短信 Go SDK
 ===
 
+[![GoDoc](https://godoc.org/github.com/qichengzx/qcloudsms_go?status.svg)](https://godoc.org/github.com/qichengzx/qcloudsms_go)
+[![license](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/qichengzx/qcloudsms_go/master/LICENSE)
+
 ## Overview
 
 > 此 SDK 为非官方版本，命名和结构上与官方版本有一些区别。
@@ -85,3 +88,11 @@ opt.SIGN = "yoursign"
 var client = NewClient(opt)
 
 ```
+
+## Documentation
+
+[完整文档](https://godoc.org/github.com/qichengzx/qcloudsms_go)
+
+## License
+
+This project is under the MIT License.
