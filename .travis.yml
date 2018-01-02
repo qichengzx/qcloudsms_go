@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.x
+  - master
+  
+sudo: false
+
+install:
+  - go get -t -v ./...
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always

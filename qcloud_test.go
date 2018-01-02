@@ -96,7 +96,7 @@ func ExampleQcloudSMS_SendSMSSingle() {
 	client.SendSMSSingle(sm)
 }
 
-func ExampleQcloudSMS_GetTemplateByPAGE() {
+func ExampleQcloudSMS_GetTemplateByPage() {
 	opt := NewOptions()
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
@@ -119,5 +119,5 @@ func ExampleQcloudSMS_DelSign() {
 
 	var client = NewClient(opt)
 
-	client.DelSign([]int{171231, 171230})
+	client.DelSign([]uint{171231, 171230})
 }

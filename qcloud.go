@@ -267,12 +267,12 @@ func (c *QcloudSMS) NewRequest(params interface{}) ([]byte, error) {
 	httpClient := &http.Client{
 		Timeout: c.Options.HTTP.Timeout,
 	}
-	resp, err := httpClient.Do(req)
-	defer resp.Body.Close()
 
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return []byte{}, err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		return []byte{}, ErrRequest
