@@ -7,7 +7,12 @@ go:
 sudo: false
 
 install:
-  - go get -t -v ./...
+  - go build -v ./...
+
+script:
+  - go vet ./...
+  - golint
+  - GORACE="halt_on_error=1" go test -v -race ./...
 
 notifications:
   email:
