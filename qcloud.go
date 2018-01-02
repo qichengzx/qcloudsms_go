@@ -1,6 +1,6 @@
-// 腾讯云短信平台
-// https://cloud.tencent.com/document/product/382
-
+// Package qcloudsms 是针对 腾讯云短信平台 开发的一套 Go 语言 SDK
+//
+// 产品文档：https://cloud.tencent.com/document/product/382
 package qcloudsms
 
 import (
@@ -18,6 +18,7 @@ import (
 	"time"
 )
 
+// QcloudClient 用来构造请求，设置各项参数，和执行请求的接口
 type QcloudClient interface {
 	NewRandom(l int) *QcloudSMS
 	NewSig(m string) *QcloudSMS
@@ -30,15 +31,18 @@ type QcloudClient interface {
 	SetLogger(logger *log.Logger) *QcloudSMS
 }
 
+// QcloudSMS 是请求的结构
+// 一次请求具体功能由 QcloudClient 接口实现
 type QcloudSMS struct {
 	Random  string
 	Sig     string
-	Url     string
+	URL     string
 	ReqTime int64
 	Options Options
 	Logger  *log.Logger
 }
 
+// Options 用来构造请求的参数结构
 type Options struct {
 	// 腾讯云短信appid
 	APPID string
@@ -50,7 +54,7 @@ type Options struct {
 	RandomLen int
 	UserAgent string
 
-	Http struct {
+	HTTP struct {
 		Timeout time.Duration
 	}
 
@@ -58,88 +62,94 @@ type Options struct {
 }
 
 const (
-	SDKName    = "qcloudsms-go-sdk"
-	SDKVersion = "0.3.1"
+	//SDKName SDK名称，当前主要用于 log 中
+	SDKName = "qcloudsms-go-sdk"
+	// SDKVersion 版本
+	SDKVersion = "0.3.2"
 
-	// API
+	// SVR 是腾讯云短信各请求结构的基本 URL
 	SVR string = "https://yun.tim.qq.com/v5/"
 
-	// 腾讯云短信业务主URL
+	// TLSSMSSVR 腾讯云短信业务主URL
 	TLSSMSSVR string = "tlssmssvr/"
 
-	// 腾讯云语音URL
+	// VOICESVR 腾讯云语音URL
 	VOICESVR string = "tlsvoicesvr/"
 
-	// 短信业务URL附加内容
+	// TLSSMSSVRAfter 短信业务URL附加内容
 	TLSSMSSVRAfter string = "?sdkappid=%s&random=%s"
 
-	// 发送短信
+	// SENDSMS 发送短信
 	SENDSMS string = "sendsms"
 
-	// 群发
+	// MULTISMS 群发短信
 	MULTISMS string = "sendmultisms2"
 
-	// 语音验证码
+	// SENDVOICE 发送语音验证码
 	SENDVOICE string = "sendvoice"
 
-	// 语音通知
+	// PROMPTVOICE 发送语音通知
 	PROMPTVOICE string = "sendvoiceprompt"
 
-	// 添加模板
+	// ADDTEMPLATE 添加模板
 	ADDTEMPLATE string = "add_template"
 
-	// 查询模板状态
+	// GETTEMPLATE 查询模板状态
 	GETTEMPLATE string = "get_template"
 
-	// 查询模板
+	// DELTEMPLATE 查询模板
 	DELTEMPLATE string = "del_template"
 
-	// 修改模板
+	// MODTEMPLATE 修改模板
 	MODTEMPLATE string = "mod_template"
 
-	// 添加签名
+	// ADDSIGN 添加签名
 	ADDSIGN string = "add_sign"
 
-	// 查询签名状态
+	// GETSIGN 查询签名状态
 	GETSIGN string = "get_sign"
 
-	// 查询签名状态
+	// MODSIGN 查询签名状态
 	MODSIGN string = "mod_sign"
 
-	// 查询签名状态
+	// DELSIGN 查询签名状态
 	DELSIGN string = "del_sign"
 
-	// 拉取短信状态
+	// PULLSTATUS 拉取短信状态
 	PULLSTATUS string = "pullstatus"
 
-	// 拉取单个手机短信状态（下发状态，短信回复等）
+	// MOBILESTATUS 拉取单个手机短信状态（下发状态，短信回复等）
 	MOBILESTATUS string = "pullstatus4mobile"
 
-	// 发送数据统计
+	// PULLSENDSTATUS 发送数据统计
 	PULLSENDSTATUS string = "pullsendstatus"
 
-	// 回执数据统计
+	// PULLCBSTATUS 回执数据统计
 	PULLCBSTATUS string = "pullcallbackstatus"
 
-	// 请求成功的状态码
-	SUCCESS int = 0
+	// SUCCESS 请求成功的状态码
+	SUCCESS uint = 0
 
-	// 短信类型，0=普通短信，1=营销短信
-	MSGTYPE   int = 0
-	MSGTYPEAD int = 1
+	// MSGTYPE 普通短信类型
+	MSGTYPE uint = 0
+	// MSGTYPEAD 营销短信类型
+	MSGTYPEAD uint = 1
 
-	// 群发短信单批次最大手机号数量
+	// MULTISMSMAX 群发短信单批次最大手机号数量
 	MULTISMSMAX int = 200
 
-	// 语音类型，为2表示语音通知
-	PROMPTVOICETYPE int = 2
+	// PROMPTVOICETYPE 语音类型，为2表示语音通知
+	PROMPTVOICETYPE uint = 2
 )
 
 var (
+	//ErrMultiCount 群发号码数量错误
 	ErrMultiCount = errors.New("单次提交不超过200个手机号")
+	//ErrRequest 请求失败
 	ErrRequest = errors.New("请求失败")
 )
 
+// NewOptions 返回一个新的 *Options
 func NewOptions() *Options {
 	opt := &Options{
 		APPID:  "",
@@ -152,11 +162,12 @@ func NewOptions() *Options {
 		Debug: false,
 	}
 
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 
 	return opt
 }
 
+// NewClient 生成一个新的 client 实例
 func NewClient(o *Options) *QcloudSMS {
 	c := &QcloudSMS{}
 	c.Options = *o
@@ -168,26 +179,31 @@ func NewClient(o *Options) *QcloudSMS {
 	return c
 }
 
+// SetAPPID 为实例设置 APPID
 func (c *QcloudSMS) SetAPPID(appid string) *QcloudSMS {
 	c.Options.APPID = appid
 	return c
 }
 
+// SetAPPKEY 为实例设置 APPKEY
 func (c *QcloudSMS) SetAPPKEY(appkey string) *QcloudSMS {
 	c.Options.APPKEY = appkey
 	return c
 }
 
+// SetSIGN 为实例设置 SIGN
 func (c *QcloudSMS) SetSIGN(sign string) *QcloudSMS {
 	c.Options.SIGN = sign
 	return c
 }
 
+// SetLogger 为实例设置 logger
 func (c *QcloudSMS) SetLogger(logger *log.Logger) *QcloudSMS {
 	c.Logger = logger
 	return c
 }
 
+// SetDebug 为实例设置调试模式
 func (c *QcloudSMS) SetDebug(debug bool) *QcloudSMS {
 	if debug {
 		c.Options.Debug = debug
@@ -196,7 +212,7 @@ func (c *QcloudSMS) SetDebug(debug bool) *QcloudSMS {
 	return c
 }
 
-// 为 client 生成新的随机数
+// NewRandom 为实例生成新的随机数
 func (c *QcloudSMS) NewRandom(l int) *QcloudSMS {
 	str := "0123456789"
 	bytes := []byte(str)
@@ -210,7 +226,7 @@ func (c *QcloudSMS) NewRandom(l int) *QcloudSMS {
 	return c
 }
 
-// 为请求构造sig
+// NewSig 为实例生成 sig
 func (c *QcloudSMS) NewSig(m string) *QcloudSMS {
 	var t = strconv.FormatInt(c.ReqTime, 10)
 	var sigContent = "appkey=" + c.Options.APPKEY + "&random=" + c.Random + "&time=" + t
@@ -226,8 +242,8 @@ func (c *QcloudSMS) NewSig(m string) *QcloudSMS {
 	return c
 }
 
-// 为请求构造URL
-func (c *QcloudSMS) NewUrl(api string) *QcloudSMS {
+// NewURL 为实例设置 URL
+func (c *QcloudSMS) NewURL(api string) *QcloudSMS {
 	url := ""
 	if api == SENDVOICE || api == PROMPTVOICE {
 		url = VOICESVR
@@ -235,21 +251,21 @@ func (c *QcloudSMS) NewUrl(api string) *QcloudSMS {
 		url = TLSSMSSVR
 	}
 
-	c.Url = SVR + url + api + fmt.Sprintf(TLSSMSSVRAfter, c.Options.APPID, c.Random)
+	c.URL = SVR + url + api + fmt.Sprintf(TLSSMSSVRAfter, c.Options.APPID, c.Random)
 
 	return c
 }
 
-// 发送请求
+// NewRequest 执行实例发送请求
 func (c *QcloudSMS) NewRequest(params interface{}) ([]byte, error) {
 	j, _ := json.Marshal(params)
 
-	req, err := http.NewRequest("POST", c.Url, bytes.NewBuffer([]byte(j)))
+	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer([]byte(j)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", c.Options.UserAgent)
 
 	httpClient := &http.Client{
-		Timeout: c.Options.Http.Timeout,
+		Timeout: c.Options.HTTP.Timeout,
 	}
 	resp, err := httpClient.Do(req)
 	defer resp.Body.Close()
@@ -268,7 +284,7 @@ func (c *QcloudSMS) NewRequest(params interface{}) ([]byte, error) {
 	}
 
 	if c.Options.Debug {
-		c.Logger.Printf("Request Url : %s, Request Params : %s, Request Res : %s\n", c.Url, string(j), string(body))
+		c.Logger.Printf("Request Url : %s, Request Params : %s, Request Res : %s\n", c.URL, string(j), string(body))
 	}
 
 	return body, err

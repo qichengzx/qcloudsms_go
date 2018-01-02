@@ -1,5 +1,3 @@
-// 语音
-
 package qcloudsms
 
 import (
@@ -7,7 +5,7 @@ import (
 	"errors"
 )
 
-// 语音接口请求结构
+// VoiceReq 语音接口请求结构
 type VoiceReq struct {
 	// 手机号码结构
 	Tel struct {
@@ -16,7 +14,7 @@ type VoiceReq struct {
 	} `json:"tel"`
 
 	// 语音类型，为2表示语音通知
-	Prompttype int `json:"prompttype,omitempty"`
+	Prompttype uint `json:"prompttype,omitempty"`
 
 	// 语音内容，语音类型为通知时有效
 	Promptfile string `json:"promptfile,omitempty"`
@@ -25,21 +23,21 @@ type VoiceReq struct {
 	Msg string `json:"msg,omitempty"`
 
 	// 播放次数
-	Playtimes int    `json:"playtimes"`
+	Playtimes uint   `json:"playtimes"`
 	Sig       string `json:"sig"`
 	Time      int64  `json:"time"`
 	Ext       string `json:"ext"`
 }
 
-// 语音接口返回结构
+// VoiceResult 语音发送后返回结果的结构
 type VoiceResult struct {
-	Result int    `json:"result"`
+	Result uint   `json:"result"`
 	Errmsg string `json:"errmsg"`
 	Ext    string `json:"ext"`
 	Callid string `json:"callid"`
 }
 
-// 发送语音
+// SendVoice 执行发送语音的逻辑
 //
 // 此接口整合了语音验证码和语音通知，使用时根据相应的参数构造请求体即可。
 func (c *QcloudSMS) SendVoice(v VoiceReq) (bool, error) {
@@ -51,7 +49,7 @@ func (c *QcloudSMS) SendVoice(v VoiceReq) (bool, error) {
 		api = SENDVOICE
 	}
 
-	c = c.NewSig(v.Tel.Mobile).NewUrl(api)
+	c = c.NewSig(v.Tel.Mobile).NewURL(api)
 
 	v.Sig = c.Sig
 	v.Time = c.ReqTime

@@ -9,7 +9,7 @@ func ExampleNewClient() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	NewClient(opt)
@@ -20,7 +20,7 @@ func ExampleQcloudSMS_SendVoice() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
@@ -42,7 +42,7 @@ func ExampleQcloudSMS_NewSign() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
@@ -61,7 +61,7 @@ func ExampleQcloudSMS_ModTemplate() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
@@ -82,15 +82,15 @@ func ExampleQcloudSMS_SendSMSSingle() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
 	var sm = SMSSingleReq{
-		Type:0,
-		Msg:"短信内容",
-		Tel:SMSTel{Nationcode: "86", Mobile: "mobile"},
+		Type: 0,
+		Msg:  "短信内容",
+		Tel:  SMSTel{Nationcode: "86", Mobile: "mobile"},
 	}
 
 	client.SendSMSSingle(sm)
@@ -101,7 +101,7 @@ func ExampleQcloudSMS_GetTemplateByPAGE() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
@@ -114,10 +114,10 @@ func ExampleQcloudSMS_DelSign() {
 	opt.APPID = "yourappid"
 	opt.APPKEY = "yourappkey"
 	opt.Debug = true
-	opt.Http.Timeout = 10 * time.Second
+	opt.HTTP.Timeout = 10 * time.Second
 	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
-	client.DelSign([]int{171231,171230})
+	client.DelSign([]int{171231, 171230})
 }

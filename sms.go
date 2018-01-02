@@ -1,5 +1,3 @@
-// 短信API
-
 package qcloudsms
 
 import (
@@ -9,7 +7,7 @@ import (
 )
 
 /*
-短信请求结构体
+SMSSingleReq 发送单条短信请求结构
 
 将单发短信和模板短信统一到了一个结构体里，构造请求时为对应请求的必传字段赋值即可
 
@@ -30,24 +28,24 @@ type SMSSingleReq struct {
 	Ext    string   `json:"ext"`
 }
 
-// 国家码，手机号
+// SMSTel 国家码，手机号
 type SMSTel struct {
 	Nationcode string `json:"nationcode"`
 	Mobile     string `json:"mobile"`
 }
 
-// 发送短信返回结构
+// SMSResult 发送短信返回结构
 type SMSResult struct {
-	Result int    `json:"result"`
+	Result uint   `json:"result"`
 	Errmsg string `json:"errmsg"`
 	Ext    string `json:"ext"`
 	Sid    string `json:"sid,omitempty"`
-	Fee    int    `json:"fee,omitempty"`
+	Fee    uint   `json:"fee,omitempty"`
 }
 
-// 发送短信
+// SendSMSSingle 发送单条短信
 func (c *QcloudSMS) SendSMSSingle(ss SMSSingleReq) (bool, error) {
-	c = c.NewSig(ss.Tel.Mobile).NewUrl(SENDSMS)
+	c = c.NewSig(ss.Tel.Mobile).NewURL(SENDSMS)
 
 	ss.Time = c.ReqTime
 	ss.Sig = c.Sig
@@ -68,7 +66,7 @@ func (c *QcloudSMS) SendSMSSingle(ss SMSSingleReq) (bool, error) {
 }
 
 /*
-群发短信请求结构体
+SMSMultiReq 群发短信请求结构
 
 将普通短信和模板短信统一到了一个结构体里，构造请求时为对应请求的必传字段赋值即可
 
@@ -78,9 +76,9 @@ func (c *QcloudSMS) SendSMSSingle(ss SMSSingleReq) (bool, error) {
 */
 type SMSMultiReq struct {
 	Tel    []SMSTel `json:"tel"`
-	Type   int      `json:"type,omitempty"`
+	Type   uint     `json:"type,omitempty"`
 	Sign   string   `json:"sign,omitempty"`
-	TplID  int      `json:"tpl_id,omitempty"`
+	TplID  uint     `json:"tpl_id,omitempty"`
 	Params []string `json:"params,omitempty"`
 	Msg    string   `json:"msg,omitempty"`
 	Sig    string   `json:"sig"`
@@ -89,22 +87,22 @@ type SMSMultiReq struct {
 	Ext    string   `json:"ext"`
 }
 
-// 群发短信返回结构
+// SMSMultiResult 群发短信返回结构
 type SMSMultiResult struct {
-	Result int    `json:"result"`
+	Result uint   `json:"result"`
 	Errmsg string `json:"errmsg"`
 	Ext    string `json:"ext"`
 	Detail []struct {
-		Result     int    `json:"result"`
+		Result     uint   `json:"result"`
 		Errmsg     string `json:"errmsg"`
 		Mobile     string `json:"mobile"`
 		Nationcode string `json:"nationcode"`
 		Sid        string `json:"sid,omitempty"`
-		Fee        int    `json:"fee,omitempty"`
+		Fee        uint   `json:"fee,omitempty"`
 	} `json:"detail"`
 }
 
-// 群发短信
+// SendSMSMulti 群发短信
 func (c *QcloudSMS) SendSMSMulti(sms SMSMultiReq) (bool, error) {
 	var sigMobile []string
 
@@ -117,7 +115,7 @@ func (c *QcloudSMS) SendSMSMulti(sms SMSMultiReq) (bool, error) {
 	}
 
 	mobileStr := strings.Join(sigMobile, ",")
-	c = c.NewSig(mobileStr).NewUrl(MULTISMS)
+	c = c.NewSig(mobileStr).NewURL(MULTISMS)
 
 	sms.Time = c.ReqTime
 	sms.Sig = c.Sig
@@ -137,7 +135,7 @@ func (c *QcloudSMS) SendSMSMulti(sms SMSMultiReq) (bool, error) {
 	return false, errors.New(res.Errmsg)
 }
 
-// 拉取单个手机短信状态请求结构
+// StatusMobileReq 拉取单个手机短信状态请求结构
 type StatusMobileReq struct {
 	Sig  string `json:"sig"`
 	Time int64  `json:"time"`
@@ -151,7 +149,7 @@ type StatusMobileReq struct {
 	Mobile     string `json:"mobile"`
 }
 
-// 拉取单个手机短信状态的返回结构
+// StatusMobileResult 拉取单个手机短信状态的返回结构
 type StatusMobileResult struct {
 	Result int               `json:"result"`
 	Errmsg string            `json:"errmsg"`
@@ -159,7 +157,7 @@ type StatusMobileResult struct {
 	Data   []SMSStatusResult `json:"data"`
 }
 
-// 短信回复结构
+// StatusReplyResult 短信回复结构
 type StatusReplyResult struct {
 	Result int              `json:"result"`
 	Errmsg string           `json:"errmsg"`
@@ -167,7 +165,7 @@ type StatusReplyResult struct {
 	Data   []SMSReplyResult `json:"data"`
 }
 
-// 单个手机短信状态结构
+// SMSStatusResult 单个手机短信状态结构
 type SMSStatusResult struct {
 	UserReceiveTime string `json:"user_receive_time"`
 	Nationcode      string `json:"nationcode"`
@@ -178,7 +176,7 @@ type SMSStatusResult struct {
 	Sid             string `json:"sid"`
 }
 
-// 短信回复列表结构
+// SMSReplyResult 短信回复列表结构
 type SMSReplyResult struct {
 	Nationcode string `json:"nationcode"`
 	Mobile     string `json:"mobile"`
@@ -188,13 +186,11 @@ type SMSReplyResult struct {
 	Extend     string `json:"extend"`
 }
 
-/*
- 拉取单个手机短信状态（下发状态）
-
- https://cloud.tencent.com/document/product/382/5811
-*/
+// GetStatusForMobile 拉取单个手机短信状态（下发状态）
+//
+// https://cloud.tencent.com/document/product/382/5811
 func (c *QcloudSMS) GetStatusForMobile(smr StatusMobileReq) (StatusMobileResult, error) {
-	c = c.NewSig("").NewUrl(MOBILESTATUS)
+	c = c.NewSig("").NewURL(MOBILESTATUS)
 
 	smr.Time = c.ReqTime
 	smr.Sig = c.Sig
@@ -210,13 +206,11 @@ func (c *QcloudSMS) GetStatusForMobile(smr StatusMobileReq) (StatusMobileResult,
 	return res, nil
 }
 
-/*
- 拉取单个手机短信状态（短信回复）
-
- https://cloud.tencent.com/document/product/382/5811
-*/
+// GetReplyForMobile 拉取单个手机短信状态（短信回复）
+//
+// https://cloud.tencent.com/document/product/382/5811
 func (c *QcloudSMS) GetReplyForMobile(smr StatusMobileReq) (StatusReplyResult, error) {
-	c = c.NewSig("").NewUrl(MOBILESTATUS)
+	c = c.NewSig("").NewURL(MOBILESTATUS)
 
 	smr.Time = c.ReqTime
 	smr.Sig = c.Sig
@@ -232,7 +226,7 @@ func (c *QcloudSMS) GetReplyForMobile(smr StatusMobileReq) (StatusReplyResult, e
 	return res, nil
 }
 
-// 拉取短信状态请求结构体
+// PullStatusReq 拉取短信状态请求结构
 type PullStatusReq struct {
 	Sig  string `json:"sig"`
 	Time int64  `json:"time"`
@@ -242,6 +236,7 @@ type PullStatusReq struct {
 	Max int `json:"max"`
 }
 
+// PullStatusResult 拉取下发状态返回数据结构
 type PullStatusResult struct {
 	Result int    `json:"result"`
 	Errmsg string `json:"errmsg"`
@@ -250,6 +245,7 @@ type PullStatusResult struct {
 	Data  []SMSStatusResult `json:"data"`
 }
 
+// PullReplyResult 拉取短信回复返回数据结构
 type PullReplyResult struct {
 	Result int    `json:"result"`
 	Errmsg string `json:"errmsg"`
@@ -258,12 +254,12 @@ type PullReplyResult struct {
 	Data  []SMSReplyResult `json:"data"`
 }
 
-// 拉取短信状态（下发状态,短信回复）
+// GetStatusMQ 拉取短信状态（下发状态,短信回复）
 // 已拉取过的数据将不会再返回
 //
 // https://cloud.tencent.com/document/product/382/5810
 func (c *QcloudSMS) GetStatusMQ(psr PullStatusReq) (StatusMobileResult, error) {
-	c = c.NewSig("").NewUrl(PULLSTATUS)
+	c = c.NewSig("").NewURL(PULLSTATUS)
 
 	psr.Time = c.ReqTime
 	psr.Sig = c.Sig
