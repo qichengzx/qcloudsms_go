@@ -80,16 +80,20 @@ go get github.com/qichengzx/qcloudsms_go
 
 import "github.com/qichengzx/qcloudsms_go"
 
-opt := NewOptions()
+opt := qcloudsms.NewOptions()
 opt.APPID = "yourappid"
 opt.APPKEY = "yourappkey"
 opt.Debug = true
 opt.Http.Timeout = 10 * time.Second
 opt.SIGN = "yoursign"
 
-var client = NewClient(opt)
+var client = qcloudsms.NewClient(opt)
 
 ```
+
+更多示例可在 [Example](https://github.com/qichengzx/qcloudsms_go/blob/master/qcloud_test.go) 或 [godoc](https://godoc.org/github.com/qichengzx/qcloudsms_go#pkg-examples) 查看
+
+注意：qcloud_test.go 中的示例代码，调用 NewOptions()，NewClient(opt) 时没有加包名，在实际调用中需要加入，或 import 时加入省略包名的操作。
 
 ## Documentation
 
