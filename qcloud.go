@@ -1,4 +1,4 @@
-// Package qcloudsms 是针对 腾讯云短信平台 开发的一套 Go 语言 SDK
+// qcloudsms 是针对 腾讯云短信平台 开发的一套 Go 语言 SDK
 //
 // 产品文档：https://cloud.tencent.com/document/product/382
 package qcloudsms
@@ -51,6 +51,7 @@ type Options struct {
 	// 表示短信签名
 	SIGN string
 
+	// 请求随机数长度
 	RandomLen int
 	UserAgent string
 
@@ -58,6 +59,7 @@ type Options struct {
 		Timeout time.Duration
 	}
 
+	// 是否开启Debug
 	Debug bool
 }
 
@@ -65,7 +67,7 @@ const (
 	//SDKName SDK名称，当前主要用于 log 中
 	SDKName = "qcloudsms-go-sdk"
 	// SDKVersion 版本
-	SDKVersion = "0.3.2"
+	SDKVersion = "0.3.3"
 
 	// SVR 是腾讯云短信各请求结构的基本 URL
 	SVR string = "https://yun.tim.qq.com/v5/"
@@ -150,19 +152,21 @@ var (
 )
 
 // NewOptions 返回一个新的 *Options
-func NewOptions() *Options {
+func NewOptions(appid, appkey, sign string) *Options {
 	opt := &Options{
-		APPID:  "",
-		APPKEY: "",
-		SIGN:   "",
+		APPID:  appid,
+		APPKEY: appkey,
+		SIGN:   sign,
 
 		RandomLen: 6,
 		UserAgent: SDKName + "/" + SDKVersion,
 
 		Debug: false,
-	}
 
-	opt.HTTP.Timeout = 10 * time.Second
+		HTTP: struct {
+			Timeout time.Duration
+		}{Timeout: 10 * time.Second},
+	}
 
 	return opt
 }

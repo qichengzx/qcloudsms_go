@@ -1,49 +1,40 @@
 package qcloudsms
 
-import (
-	"time"
+var (
+	appid string = "yourappid"
+	appkey string = "yourappkey"
+	sign string = "yoursign"
 )
 
 func ExampleNewClient() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
+	// 可以为 options 指定debug
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
-
 	NewClient(opt)
 }
 
 func ExampleQcloudSMS_SendVoice() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
-	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
+	opt := NewOptions(appid,appkey,sign)
 
 	var client = NewClient(opt)
+	//也可以在生成Client实例后设定 debug 模式
+	client.SetDebug(true)
 
 	var vr = VoiceReq{
 		Promptfile: "您的验证码为：123。该验证码10分钟内有效。",
 		Playtimes:  1,
 		Prompttype: 2,
+		Tel: struct {
+			Nationcode string
+			Mobile     string
+		}{Nationcode: "86", Mobile: "yourmobile"},
 	}
-
-	vr.Tel.Nationcode = "86"
-	vr.Tel.Mobile = "yourmobile"
-
 	client.SendVoice(vr)
 }
 
 func ExampleQcloudSMS_NewSign() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
@@ -57,12 +48,8 @@ func ExampleQcloudSMS_NewSign() {
 }
 
 func ExampleQcloudSMS_ModTemplate() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
@@ -78,12 +65,8 @@ func ExampleQcloudSMS_ModTemplate() {
 }
 
 func ExampleQcloudSMS_SendSMSSingle() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
@@ -97,12 +80,8 @@ func ExampleQcloudSMS_SendSMSSingle() {
 }
 
 func ExampleQcloudSMS_GetTemplateByPage() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 
@@ -110,12 +89,8 @@ func ExampleQcloudSMS_GetTemplateByPage() {
 }
 
 func ExampleQcloudSMS_DelSign() {
-	opt := NewOptions()
-	opt.APPID = "yourappid"
-	opt.APPKEY = "yourappkey"
+	opt := NewOptions(appid,appkey,sign)
 	opt.Debug = true
-	opt.HTTP.Timeout = 10 * time.Second
-	opt.SIGN = "yoursign"
 
 	var client = NewClient(opt)
 

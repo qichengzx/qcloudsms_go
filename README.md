@@ -54,17 +54,20 @@
 
 ## 准备
 
-- [ ] 申请APPID以及APPKey
+在开始开发云短信应用之前，需要准备如下信息:
 
-> 在开始使用之前，需要先获取APPID和APPkey，如尚未申请，请到https://console.qcloud.com/sms/smslist 中添加应用，应用添加成功后您将获得APPID以及APPKey，注意APPID是以14xxxxx开头。
+- [x] 申请APPID以及APPKey
 
-- [ ] 申请签名
+> 云短信应用SDK `AppID`和`AppKey`可在[短信控制台](https://console.cloud.tencent.com/sms)的应用信息里获取，如您尚未添加应用，请到[短信控制台](https://console.cloud.tencent.com/sms)中添加应用。
 
-> 下发短信必须携带签名，在相应服务模块 *短信内容配置*  中进行申请。
+- [x] 申请签名
 
-- [ ] 申请模板
+一个完整的短信由短信`签名`和短信正文内容两部分组成，短信`签名`须申请和审核，`签名`可在[短信控制台](https://console.cloud.tencent.com/sms)的相应服务模块`内容配置`中进行申请。
 
-> 下发短信内容必须经过审核，在相应服务 *短信内容配置* 中进行申请。
+- [x] 申请模板
+
+> 同样短信或语音正文内容`模板`须申请和审核，`模板`可在[短信控制台](https://console.cloud.tencent.com/sms)的相应服务模块`内容配置`中进行申请。
+
 
 完成以上三项便可开始代码开发。
 
@@ -80,18 +83,14 @@ go get github.com/qichengzx/qcloudsms_go
 
 import "github.com/qichengzx/qcloudsms_go"
 
-opt := qcloudsms.NewOptions()
-opt.APPID = "yourappid"
-opt.APPKEY = "yourappkey"
-opt.Debug = true
-opt.Http.Timeout = 10 * time.Second
-opt.SIGN = "yoursign"
+opt := qcloudsms.NewOptions("yourappid","yourappkey","yoursign")
 
 var client = qcloudsms.NewClient(opt)
+client.SetDebug(true)
 
 ```
 
-更多示例可在 [Example](https://github.com/qichengzx/qcloudsms_go/blob/master/qcloud_test.go) 或 [godoc](https://godoc.org/github.com/qichengzx/qcloudsms_go#pkg-examples) 查看
+更多示例可在 [Example](https://github.com/qichengzx/qcloudsms_go/blob/master/example.go) 或 [godoc](https://godoc.org/github.com/qichengzx/qcloudsms_go#pkg-examples) 查看
 
 注意：qcloud_test.go 中的示例代码，调用 NewOptions()，NewClient(opt) 时没有加包名，在实际调用中需要加入，或 import 时加入省略包名的操作。
 
