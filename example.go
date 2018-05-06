@@ -24,11 +24,9 @@ func ExampleQcloudSMS_SendVoice() {
 		Promptfile: "您的验证码为：123。该验证码10分钟内有效。",
 		Playtimes:  1,
 		Prompttype: 2,
-		Tel: struct {
-			Nationcode string
-			Mobile     string
-		}{Nationcode: "86", Mobile: "yourmobile"},
 	}
+	vr.Tel.Mobile = "86"
+	vr.Tel.Mobile = "yourmobile"
 	client.SendVoice(vr)
 }
 
