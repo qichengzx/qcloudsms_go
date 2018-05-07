@@ -1,0 +1,22 @@
+version: {build}
+
+clone_folder: c:\gopath\src\github.com\qichengzx\qcloudsms_go
+
+environment:
+  GOPATH: c:\gopath
+
+build_script:
+- cmd: >-
+    echo %PATH%
+
+    echo %GOPATH%
+
+    go version
+
+    go env
+
+    go vet ./...
+
+    go test -v -race ./...
+
+    go build -v ./...

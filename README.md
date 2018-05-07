@@ -2,6 +2,7 @@
 ===
 
 [![Build Status](https://api.travis-ci.org/qichengzx/qcloudsms_go.svg)](https://travis-ci.org/qichengzx/qcloudsms_go)
+[![Build status](https://ci.appveyor.com/api/projects/status/288d9l3bihmsjseo/branch/master?svg=true)](https://ci.appveyor.com/project/qichengzx/qcloudsms-go/branch/master)
 [![GoDoc](https://godoc.org/github.com/qichengzx/qcloudsms_go?status.svg)](https://godoc.org/github.com/qichengzx/qcloudsms_go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/qichengzx/qcloudsms_go)](https://goreportcard.com/report/github.com/qichengzx/qcloudsms_go)
 [![license](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/qichengzx/qcloudsms_go/master/LICENSE)
