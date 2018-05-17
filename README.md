@@ -93,7 +93,7 @@ client.SetDebug(true)
 
 更多示例可在 [Example](https://github.com/qichengzx/qcloudsms_go/blob/master/example.go) 或 [godoc](https://godoc.org/github.com/qichengzx/qcloudsms_go#pkg-examples) 查看
 
-注意：qcloud_test.go 中的示例代码，调用 NewOptions()，NewClient(opt) 时没有加包名，在实际调用中需要加入，或 import 时加入省略包名的操作。
+注意：example.go 中的示例代码，调用 NewOptions()，NewClient(opt) 时没有加包名，在实际调用中需要加入，或 import 时加入省略包名的操作。
 
 ## Documentation
 

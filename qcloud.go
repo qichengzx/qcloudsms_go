@@ -1,4 +1,4 @@
-// qcloudsms 是针对 腾讯云短信平台 开发的一套 Go 语言 SDK
+// Package qcloudsms 是针对 腾讯云短信平台 开发的一套 Go 语言 SDK
 //
 // 产品文档：https://cloud.tencent.com/document/product/382
 package qcloudsms
