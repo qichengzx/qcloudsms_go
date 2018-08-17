@@ -20,7 +20,7 @@ type SMSSingleReq struct {
 	Type   int      `json:"type,omitempty"`
 	Sign   string   `json:"sign,omitempty"`
 	TplID  int      `json:"tpl_id,omitempty"`
-	Params []string `json:"params,omitempty"`
+	Params []string `json:"params"`
 	Msg    string   `json:"msg,omitempty"`
 	Sig    string   `json:"sig"`
 	Time   int64    `json:"time"`
@@ -79,7 +79,7 @@ type SMSMultiReq struct {
 	Type   uint     `json:"type,omitempty"`
 	Sign   string   `json:"sign,omitempty"`
 	TplID  uint     `json:"tpl_id,omitempty"`
-	Params []string `json:"params,omitempty"`
+	Params []string `json:"params"`
 	Msg    string   `json:"msg,omitempty"`
 	Sig    string   `json:"sig"`
 	Time   int64    `json:"time"`
