@@ -3,6 +3,8 @@ package qcloudsms
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"github.com/qichengzx/qcloudsms_go"
 )
 
 // VoiceReq 语音接口请求结构
@@ -67,4 +69,45 @@ func (c *QcloudSMS) SendVoice(v VoiceReq) (bool, error) {
 	}
 
 	return false, errors.New(res.Errmsg)
+}
+
+//选择模板发送语音的参数
+type SMSVoiceTemplate struct {
+	// 手机号码结构
+	Tel struct {
+		Nationcode string `json:"nationcode"`
+		Mobile     string `json:"mobile"`
+	} `json:"tel"`
+	//参数对应模板的{1} {2}...
+	Params []string `json:"params"`
+	TplId  int      `json:"tpl_id"`
+	// 播放次数
+	Playtimes uint   `json:"playtimes"`
+	Sig       string `json:"sig"`
+	Time      int64  `json:"time"`
+	Ext       string `json:"ext"`
+}
+
+//根据配置好的模板进行语音发送
+func (c *QcloudSMS) VoiceTemplateSend(s SMSVoiceTemplate) (bool, error) {
+	c.NewSig(s.Tel.Mobile).voiceTemplateNewURL()
+	s.Sig = c.Sig
+	s.Time = c.ReqTime
+	resp, err := c.NewRequest(s)
+	if err != nil {
+		return false, err
+	}
+	var res VoiceResult
+	json.Unmarshal([]byte(resp), &res)
+
+	if res.Result == SUCCESS {
+		return true, errors.New("发送成功")
+	}
+
+	return false, errors.New(res.Errmsg)
+}
+
+func (c *QcloudSMS) voiceTemplateNewURL() {
+	url := VOICESVR
+	c.URL = VSVR + url + TVOICE + fmt.Sprintf(qcloudsms.TLSSMSSVRAfter, c.Options.APPID, c.Random)
 }
