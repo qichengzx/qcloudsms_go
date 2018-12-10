@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/qichengzx/qcloudsms_go"
 )
 
 // VoiceReq 语音接口请求结构
@@ -109,5 +108,5 @@ func (c *QcloudSMS) VoiceTemplateSend(s SMSVoiceTemplate) (bool, error) {
 
 func (c *QcloudSMS) voiceTemplateNewURL() {
 	url := VOICESVR
-	c.URL = VSVR + url + TVOICE + fmt.Sprintf(qcloudsms.TLSSMSSVRAfter, c.Options.APPID, c.Random)
+	c.URL = VSVR + url + TVOICE + fmt.Sprintf(TLSSMSSVRAfter, c.Options.APPID, c.Random)
 }
