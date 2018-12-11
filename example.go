@@ -1,20 +1,24 @@
 package qcloudsms
 
+import (
+	"time"
+)
+
 var (
-	appid string = "yourappid"
+	appid  string = "yourappid"
 	appkey string = "yourappkey"
-	sign string = "yoursign"
+	sign   string = "yoursign"
 )
 
 func ExampleNewClient() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	// 可以为 options 指定debug
 	opt.Debug = true
 	NewClient(opt)
 }
 
 func ExampleQcloudSMS_SendVoice() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 
 	var client = NewClient(opt)
 	//也可以在生成Client实例后设定 debug 模式
@@ -31,7 +35,7 @@ func ExampleQcloudSMS_SendVoice() {
 }
 
 func ExampleQcloudSMS_NewSign() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	opt.Debug = true
 
 	var client = NewClient(opt)
@@ -46,7 +50,7 @@ func ExampleQcloudSMS_NewSign() {
 }
 
 func ExampleQcloudSMS_ModTemplate() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	opt.Debug = true
 
 	var client = NewClient(opt)
@@ -63,7 +67,7 @@ func ExampleQcloudSMS_ModTemplate() {
 }
 
 func ExampleQcloudSMS_SendSMSSingle() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	opt.Debug = true
 
 	var client = NewClient(opt)
@@ -78,7 +82,7 @@ func ExampleQcloudSMS_SendSMSSingle() {
 }
 
 func ExampleQcloudSMS_GetTemplateByPage() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	opt.Debug = true
 
 	var client = NewClient(opt)
@@ -87,10 +91,27 @@ func ExampleQcloudSMS_GetTemplateByPage() {
 }
 
 func ExampleQcloudSMS_DelSign() {
-	opt := NewOptions(appid,appkey,sign)
+	opt := NewOptions(appid, appkey, sign)
 	opt.Debug = true
 
 	var client = NewClient(opt)
 
 	client.DelSign([]uint{171231, 171230})
+}
+
+//选择腾讯云上面配置的语音模板发送语音
+func ExampleQcloudSMSVoiceTemplateSend() {
+	opt := NewOptions(appid, appkey, sign)
+	opt.Debug = true
+	var client = NewClient(opt)
+	tel := SMSTel{Nationcode: "86", Mobile: "18800000000"}
+	var req = SMSVoiceTemplate{
+		TplId:     123456,
+		Playtimes: 2,
+		Params:    []string{"11", "22", "33"},
+		Tel:       tel,
+		Time:      time.Now().Unix(),
+		Ext:       "golang",
+	}
+	client.VoiceTemplateSend(req)
 }

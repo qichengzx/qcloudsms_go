@@ -142,6 +142,10 @@ const (
 
 	// PROMPTVOICETYPE 语音类型，为2表示语音通知
 	PROMPTVOICETYPE uint = 2
+	//根据模板发送语音基本url
+	VSVR = "https://cloud.tim.qq.com/v5/"
+	//	模板发送语音
+	TVOICE = "sendtvoice"
 )
 
 var (
