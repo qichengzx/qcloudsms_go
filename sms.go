@@ -59,7 +59,7 @@ func (c *QcloudSMS) SendSMSSingle(ss SMSSingleReq) (bool, error) {
 	json.Unmarshal([]byte(resp), &res)
 
 	if res.Result == SUCCESS {
-		return true, errors.New("发送成功")
+		return true, nil
 	}
 
 	return false, errors.New(res.Errmsg)
@@ -129,7 +129,7 @@ func (c *QcloudSMS) SendSMSMulti(sms SMSMultiReq) (bool, error) {
 	json.Unmarshal([]byte(resp), &res)
 
 	if res.Result == SUCCESS {
-		return true, errors.New("发送成功")
+		return true, nil
 	}
 
 	return false, errors.New(res.Errmsg)
